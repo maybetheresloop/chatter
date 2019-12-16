@@ -222,6 +222,22 @@ func (c *Conn) Part(channels []string, message ...string) {
 	}
 }
 
+func (c *Conn) Version(target ...string) {
+	if len(target) > 0 {
+		c.write <- fmt.Sprintf("VERSION %s\r\n", target[0])
+	} else {
+		c.write <- fmt.Sprintf("VERSION\r\n")
+	}
+}
+
+func (c *Conn) Topic(channel string, topic ...string) {
+	if len(topic) > 0 {
+		c.write <- fmt.Sprintf("TOPIC %s :%s\r\n", channel, topic)
+	} else {
+		c.write <- fmt.Sprintf("TOPIC %s\r\n", channel)
+	}
+}
+
 func (c *Conn) Ping(server1 string, server2 ...string) {
 	if len(server2) > 0 {
 		c.write <- fmt.Sprintf("PING %s %s\r\n", server1, server2[0])
